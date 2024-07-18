@@ -22,7 +22,7 @@ The hosts list should be one item per line like this :
 ![image](https://github.com/user-attachments/assets/09a2048e-19ae-4cbe-a0da-fc5949a360b3)
 
 
-Run the script with specified waiting time and ping amount  : 
+Run the script with specified waiting time, ping count and max-workers  : 
 ```
 python3 punglse.py -f list.txt -w 0.2 -c 2 -mw 500
 ```
