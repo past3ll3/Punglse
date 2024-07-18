@@ -6,7 +6,6 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 
 line = ''.join("\033[96m+\033[0m" if i % 2 == 0 else "\033[94m+\033[0m" for i in range(67))
 banner = """                       
-
     8888888b.                             888                   
     888   Y88b                            888                   
     888    888                            888                   
@@ -53,11 +52,15 @@ def main():
     parser.add_argument('-f', '--file', required=True, help='Path to the file containing the list of hosts')
     parser.add_argument('-w', '--timeout', type=float, default=0.5, help='Time to wait for a response in seconds (minimum: 0.2)')
     parser.add_argument('-c', '--count', type=int, default=1, help='Number of ping requests to send (minimum: 1)')
+    parser.add_argument('-mw', '--max_workers', type=int, default=100, help='Each worker corresponds to a separate thread that can execute tasks concurrently. (minimum: 1)')
 
     args = parser.parse_args()
     filename = args.file
-    wait_time = max(args.timeout, 0.2)  # Ensure wait time is at least 0.2 seconds
-    count = max(args.count, 1)  # Ensure count is at least 1
+
+    # verify flag value
+    wait_time = max(args.timeout, 0.2)
+    count = max(args.count, 1)
+    max_workers = max(args.max_workers, 1)
 
     start_time = time.time()
     total_count = 0
@@ -68,7 +71,7 @@ def main():
         with open(filename, 'r') as file:
             hosts = [host.strip() for host in file]
 
-        with ThreadPoolExecutor(max_workers=100) as executor:
+        with ThreadPoolExecutor(max_workers=max_workers) as executor:
             future_to_host = {executor.submit(check_ping, host, wait_time, count): host for host in hosts}
 
             for future in as_completed(future_to_host):
@@ -85,7 +88,7 @@ def main():
     elapsed_time = time.time() - start_time
     minutes, seconds = divmod(elapsed_time, 60)
 
-    print("\033[94m" + line + "\033[0m")  # Blue text
+    print("\033[94m" + line + "\033[0m") 
     print(f"\033[97m{total_count} hosts scanned in {int(minutes)}m{int(seconds)}s\033[0m")
     print(f"\033[97mFound \033[92m{positive_count}\033[97m hosts available :\033[0m")
     
