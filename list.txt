@@ -1,0 +1,14 @@
+google.com
+3.42.132.2
+facebook.com
+my.facebook.com
+hello.world.com
+8.8.8.8
+purple.shinyhat.org
+oui.non.com
+example.com
+53.32.53.10
+t3st.com
+instagram.com
+my.youtube.com
+10.11.12.13
